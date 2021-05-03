@@ -27,7 +27,7 @@ void setup() {
 
 void loop() {
   // Hooked to IDle task, it will run whenever CPU is idle
-  Serial.println(F("Loop function"));
+  //Serial.println(F("Loop function"));
 }
 
 /* ReadDistance Task with priority 2*/
@@ -35,7 +35,7 @@ static void ReadDistance(void* pvParameters)
 {
   while(1)
   {
-    Serial.println(F("sensor task is running"));
+    //Serial.println(F("sensor task is running"));
     distance = readUltrasonicDistance(trigPin, echoPin);
     Serial.print("Distance: ");
     Serial.println(distance);
@@ -52,12 +52,12 @@ static void Led(void *pvParameters)
     if (distance <= 10)
     {
       digitalWrite(LED, HIGH);
-      Serial.println("LED activate");
+      //Serial.println("LED activate");
     }
     else 
     {
       digitalWrite(LED, LOW);
-      Serial.println("LED deactivate");
+      //Serial.println("LED deactivate");
     }
     vTaskDelay(1);
   }
