@@ -20,26 +20,28 @@ void setup() {
   Serial.begin(9600);
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(ledPin, OUTPUT);
-  //buttonStartMillis = millis();
 }
 
 void loop() {
-  currentMillis = millis();
-  if(!digitalRead(buttonPin) && !waitingState){
-    waitingState = true;
+  currentMillis = millis(); // start counting the ms passed since program is started
+
+  //!waitingState is added to if condition to prevent stuck in 
+  //this if block when button is pressed continously
+  if(!digitalRead(buttonPin) && !waitingState){   //check whether button is pressed
+    waitingState = true;             //flag that the 2 seconds waiting for button is started
     //Serial.println("start");
-    buttonStartMillis = currentMillis;
+    buttonStartMillis = currentMillis;  //save the time when button is pressed
   } else if (digitalRead(buttonPin)){
-    waitingState = false;
+    waitingState = false;            //flag off when button is released
   }
   
-  if(waitingState){
-    if(currentMillis - buttonStartMillis >= buttonPeriod){
+  if(waitingState){                  //waiting for button started
+    if(currentMillis - buttonStartMillis >= buttonPeriod){   //if the continous input exceed the specify limit
       Serial.println("button pressed for 5 s");
-      outputState = true;
+      outputState = true;            //flag the output is ready to take place
       //flag1 = false;
       //buttonStartMillis = currentMillis;
-      outputStartMillis = currentMillis;
+      outputStartMillis = currentMillis;    //save the starting time for output
     }
   }
 
