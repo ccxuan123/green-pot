@@ -1,5 +1,5 @@
 #include <Arduino_FreeRTOS.h>
-#pragma GCC ("03")
+//#pragma GCC ("03")
 
 TaskHandle_t TaskHandle_ReadDistance1;
 TaskHandle_t TaskHandle_ReadDistance2;

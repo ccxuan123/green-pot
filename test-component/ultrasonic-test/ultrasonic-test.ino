@@ -12,6 +12,9 @@ const int LED = 11;
 long distance;
 
 void ReadDistance(void* pvParameters);
+long readUltrasonicDistance(int triggerPin, int echoPin)
+
+static void ReadDistance(void* pvParameters)
 static void Led(void *pvParameters);
 static void TaskBlink(void *pvParameters);
 
@@ -30,11 +33,9 @@ void loop() {
   //Serial.println(F("Loop function"));
 }
 
-/* ReadDistance Task with priority 2*/
-static void ReadDistance(void* pvParameters)
-{
-  while(1)
-  {
+/* ReadDistance Task with priority 3*/
+static void ReadDistance(void* pvParameters){
+  while(1){
     //Serial.println(F("sensor task is running"));
     distance = readUltrasonicDistance(trigPin, echoPin);
     Serial.print("Distance: ");
@@ -43,19 +44,15 @@ static void ReadDistance(void* pvParameters)
   }
 }
 
-/* LedOutput with priority 2*/
-static void Led(void *pvParameters)
-{
+/* LedOutput with priority 1*/
+static void Led(void *pvParameters){
   pinMode(LED, OUTPUT);
-  while(1)
-  {
-    if (distance <= 10)
-    {
+  while(1){
+    if (distance <= 10){
       digitalWrite(LED, HIGH);
       //Serial.println("LED activate");
     }
-    else 
-    {
+    else {
       digitalWrite(LED, LOW);
       //Serial.println("LED deactivate");
     }
@@ -64,12 +61,10 @@ static void Led(void *pvParameters)
 }
 
 
-/* TaskBlink with priority 2*/
-static void TaskBlink(void *pvParameters)
-{
+/* TaskBlink with priority 1*/
+static void TaskBlink(void *pvParameters){
   pinMode(LED_BUILTIN, OUTPUT);
-  while(1)
-  {
+  while(1){
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
     vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
@@ -77,7 +72,7 @@ static void TaskBlink(void *pvParameters)
   }
 }
 
-
+/*functions for ultrasonic sensor*/
 long readUltrasonicDistance(int triggerPin, int echoPin){
   pinMode(triggerPin, OUTPUT);  // Clear the trigger
   digitalWrite(triggerPin, LOW);
