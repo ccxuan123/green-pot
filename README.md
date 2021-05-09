@@ -11,8 +11,8 @@ This branch contains project files from [Platform I/O](https://platformio.org/).
 - [x] Ultrasonic Sensor [Test code](PIO/ultrasonic-delay-trigger/src/main.cpp)
 - [x] LDR [Test code](PIO/test-LDR/src/main.cpp)
 - [x] USB LED 
-- [ ] Servo motor (water spray)
-- [ ] Soil Humidity sensor
+- [x] Servo motor (water spray)
+- [x] Soil Humidity sensor [Test code](PIO/test-soil-moisture/src/main.cpp)
 
 ## Covert `main.cpp` to `.ino`
 Just remove the `<Arduino.h>` header in `main.cpp`
