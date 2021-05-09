@@ -22,7 +22,7 @@ bool outputOff = false;
 void displayDistance();
 long readUltrasonicDistance(int triggerPin, int echoPin);
 
-/* Task creation */
+/* function for define tasks */
 static void TaskReadDistance(void* pvParameters);
 static void TaskCheckObject(void* pvParameters);
 static void TaskOutput(void *pvParameters);
@@ -89,8 +89,8 @@ static void TaskCheckObject(void* pvParameters)
 /* Output with priority 2*/
 static void TaskOutput(void *pvParameters)
 {
+  pinMode(LED, OUTPUT);
   while(1){
-    pinMode(LED, OUTPUT);
     if (flag1 && flag2){
       Serial.println("output activate");
       digitalWrite(LED, HIGH);
