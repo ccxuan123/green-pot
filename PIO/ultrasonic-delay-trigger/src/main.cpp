@@ -2,11 +2,6 @@
 #include <Arduino_FreeRTOS.h>
 //#pragma GCC ("03")
 
-TaskHandle_t TaskHandle_ReadDistance;
-TaskHandle_t TaskHandle_CheckObject;
-TaskHandle_t TaskHandle_Output;
-TaskHandle_t TaskHandle_blink;
-
 const int echoPin = 8; 
 const int trigPin = 9; 
 const int LED = 11;
@@ -14,29 +9,32 @@ const int LED = 11;
 long distance;
 
 bool outputState = false;
+bool outputOff = false;
 bool flag1 = false;
 bool flag2 = false;
-bool outputOff = false;
 
 /* function for using ultrasonic sensor */
 void displayDistance();
 long readUltrasonicDistance(int triggerPin, int echoPin);
 
-/* function for define tasks */
-static void TaskReadDistance(void* pvParameters);
-static void TaskCheckObject(void* pvParameters);
+/* Pre-defind tasks function */
+static void TaskReadDist1(void* pvParameters);  // Task for reading distance at 1st point
+static void TaskReadDist2(void* pvParameters);  // Task for reading distance at 2nd point
 static void TaskOutput(void *pvParameters);
-static void TaskBlink(void *pvParameters);
+
+/* Task handles */
+TaskHandle_t Handle_ReadDist1;
+TaskHandle_t Handle_ReadDist2;
+TaskHandle_t Handle_Output;
 
 void setup() 
 {
   Serial.begin(9600);
   Serial.println(F("In Setup function"));  
 
-  xTaskCreate(TaskReadDistance, "ReadDistance", 128, NULL, 3, &TaskHandle_ReadDistance);
-  xTaskCreate(TaskCheckObject, "Check Object", 128, NULL, 3, &TaskHandle_CheckObject);
-  xTaskCreate(TaskOutput,"Output", 128, NULL, 2, &TaskHandle_Output);
-  xTaskCreate(TaskBlink, "Blink", 128, NULL, 1, &TaskHandle_blink);
+  xTaskCreate(TaskReadDist1, "ReadDistance1", 128, NULL, 3, &Handle_ReadDist1);
+  xTaskCreate(TaskReadDist2, "ReadDistance2", 128, NULL, 3, &Handle_ReadDist2);
+  xTaskCreate(TaskOutput,"Output", 128, NULL, 1, &Handle_Output);
 }
 
 void loop() 
@@ -46,79 +44,53 @@ void loop()
 }
 
 /* ReadDistance Task with priority 2*/
-static void TaskReadDistance(void* pvParameters)
+static void TaskReadDist1(void* pvParameters)
 {
   while(1) {
     //Serial.println(F("sensor task is running"));
     distance = readUltrasonicDistance(trigPin, echoPin);
-    displayDistance();
-    /*
     flag1 = (distance <= 20) ? true : false;
-    if (flag1) {
+    vTaskDelay(15);  // one tick is 15 ms
+  }
+}
+
+static void TaskReadDist2(void* pvParameters)
+{
+  while(1) {
+    if(flag1) {
       Serial.println("flag 1 triggered");
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
+      vTaskDelay(3000 / portTICK_PERIOD_MS);
       distance = readUltrasonicDistance(trigPin, echoPin);
       flag2 = (distance <= 20) ? true : false;
     }
     if (flag2) {
       Serial.println("flag 2 triggered");
-    }*/
-    vTaskDelay(5);  // one tick is 15 ms
-  }
-}
-
-static void TaskCheckObject(void* pvParameters)
-{
-  while(1){
-    if (distance <= 20) {
-      Serial.println("flag1 triggered");
-      flag1 = true;
-    } else {
-      flag1 = false;
     }
-    //vTaskDelay(2000 / portTICK_PERIOD_MS);
-    if(flag1){
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
-      Serial.println("flag2 triggered");
-      flag2 = (distance <= 20) ? true : false ;
-    }
-    vTaskDelay(5);
+    vTaskDelay(15);  // one tick is 15 ms
   }
 }
 
 /* Output with priority 2*/
 static void TaskOutput(void *pvParameters)
 {
-  pinMode(LED, OUTPUT);
   while(1){
+    pinMode(LED, OUTPUT);
     if (flag1 && flag2){
       Serial.println("output activate");
       digitalWrite(LED, HIGH);
       outputOff = true;
-    }
-    if ( !flag1 && outputOff ){
-    //if (outputOff){  
-      //vTaskDelay(1000 / portTICK_PERIOD_MS);
+      
+    } else if (!flag1 && outputOff){
+      vTaskDelay(1000/portTICK_PERIOD_MS);
       Serial.println("output deactivate");
       digitalWrite(LED, LOW);
       outputOff = false;
     }
-  vTaskDelay(5); 
+  vTaskDelay(15); 
   }
 }
 
-/* TaskBlink with priority 2*/
-static void TaskBlink(void *pvParameters)
-{
-  pinMode(LED_BUILTIN, OUTPUT);
-  while(1) {
-    digitalWrite(LED_BUILTIN, HIGH);   
-    vTaskDelay( 1000 / portTICK_PERIOD_MS );
-    digitalWrite(LED_BUILTIN, LOW);   
-    vTaskDelay( 1000 / portTICK_PERIOD_MS );
-  }
-}
-
+/* Function for using ultrasonic sensor*/
 long readUltrasonicDistance(int triggerPin, int echoPin)
 {
   pinMode(triggerPin, OUTPUT);  // Clear the trigger
