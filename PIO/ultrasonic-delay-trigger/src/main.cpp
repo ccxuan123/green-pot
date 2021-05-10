@@ -2,11 +2,13 @@
 #include <Arduino_FreeRTOS.h>
 //#pragma GCC ("03")
 
+#define LED 11
+#define ultraPot A1
 const int echoPin = 8; 
 const int trigPin = 9; 
-const int LED = 11;
 
 long distance;
+int distanceLimit;
 
 bool outputState = false;
 bool outputOff = false;
@@ -46,10 +48,14 @@ void loop()
 /* ReadDistance Task with priority 2*/
 static void TaskReadDist1(void* pvParameters)
 {
+  pinMode(ultraPot, INPUT);
   while(1) {
     //Serial.println(F("sensor task is running"));
+    distanceLimit = map(analogRead(ultraPot), 0, 1023, 5, 50);
+    Serial.println(distanceLimit);
     distance = readUltrasonicDistance(trigPin, echoPin);
-    flag1 = (distance <= 20) ? true : false;
+    Serial.println(distance);
+    flag1 = (distance <= distanceLimit) ? true : false;
     vTaskDelay(15);  // one tick is 15 ms
   }
 }
@@ -61,7 +67,7 @@ static void TaskReadDist2(void* pvParameters)
       Serial.println("flag 1 triggered");
       vTaskDelay(3000 / portTICK_PERIOD_MS);
       distance = readUltrasonicDistance(trigPin, echoPin);
-      flag2 = (distance <= 20) ? true : false;
+      flag2 = (distance <= distanceLimit) ? true : false;
     }
     if (flag2) {
       Serial.println("flag 2 triggered");
