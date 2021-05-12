@@ -19,13 +19,19 @@ P.S. Literally scare the shit out of those cats twice. Still have to clean up th
 * 1 × Servo motor
 
 ### Modifying Srpay Bottle
-<img src="https://raw.githubusercontent.com/ccxuan123/green-pot/main/.img/water_pump.jpeg" alt="Modified Water Sprayer">
+<img src="https://raw.githubusercontent.com/ccxuan123/green-pot/main/.img/water_pump.jpeg" alt="Modified Water Sprayer" width="400">
+I attached the servo motor on the handle of the spray bottle with a cable tie (zip tie). Then attached string from servo motor arm to the water spray trigger. So the water spray can now be controlled by the servo motor.
 
 ### Schematics
 add on later
+<img src="https://raw.githubusercontent.com/ccxuan123/green-pot/main/.img/schematics.png" alt="schematics">
 
 ## Software
 You need [Arduino IDE](https://www.arduino.cc/en/software) to write and upload code to Arduino Uno.
+
+### Library used
+* FreeRTOS by Richard Barry ([GitHub repo](https://github.com/feilipu/Arduino_FreeRTOS_Library))
+* Servo by Micheal Margolis ([GitHub repo](https://github.com/arduino-libraries/Servo))
 
 ## Using Platform I/O
 This branch contains project files from [Platform I/O](https://platformio.org/). It is an extension for IDE. CX use it in Visual Studio Code. The Platform I/O project files is located in [PIO](PIO) folder. The main code is inside `src` folder.  
@@ -34,9 +40,6 @@ This branch contains project files from [Platform I/O](https://platformio.org/).
 The project folder is in [green-pot-full-assemble](PIO/green-pot-full-assemble).
 The main code is in [here](PIO/green-pot-full-assemble/src/main.cpp)
 
-### Library used
-* FreeRTOS by Richard Barry ([GitHub repo](https://github.com/feilipu/Arduino_FreeRTOS_Library))
-* Servo by Micheal Margolis ([GitHub repo](https://github.com/arduino-libraries/Servo))
 
 ## Component function test
 
