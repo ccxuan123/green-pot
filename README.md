@@ -23,7 +23,6 @@ P.S. Literally scare the shit out of those cats twice. Still have to clean up th
 I attached the servo motor on the handle of the spray bottle with a cable tie (zip tie). Then attached string from servo motor arm to the water spray trigger. So the water spray can now be controlled by the servo motor.
 
 ### Schematics
-add on later
 <img src="https://raw.githubusercontent.com/ccxuan123/green-pot/main/.img/schematics.png" alt="schematics">
 
 ## Software
