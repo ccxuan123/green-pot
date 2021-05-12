@@ -17,6 +17,8 @@ P.S. Literally scare the shit out of those cats twice. Still have to clean up th
 * 1 × Buzzer
 * 1 x Spray bottle
 * 1 × Servo motor
+* 1 × Red LED (optional)
+* 1 × 150Ω resistor (optional) (not specific, can varies from 100Ω - 2kΩ) 
 
 ### Modifying Srpay Bottle
 <img src="https://raw.githubusercontent.com/ccxuan123/green-pot/main/.img/water_pump.jpeg" alt="Modified Water Sprayer" width="400">
@@ -27,6 +29,7 @@ I attached the servo motor on the handle of the spray bottle with a cable tie (z
 
 ## Software
 You need [Arduino IDE](https://www.arduino.cc/en/software) to write and upload code to Arduino Uno.
+The project code `.ino` file is in [here](arduino_ide/green-pot/green-pot.ino).
 
 ### Library used
 * FreeRTOS by Richard Barry ([GitHub repo](https://github.com/feilipu/Arduino_FreeRTOS_Library))
