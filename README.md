@@ -9,11 +9,11 @@ P.S. Literally scare the shit out of those cats twice. Still have to clean up th
 ## Hardware
 
 ### Parts List
-* 1 × Arduino Uno (micro-controller)
-* 1 × Ultrasonic sensor (to detect cat)
-* 1 × Soil moisture sensor
-* 1 × LED light
+* 1 × Arduino Uno
+* 1 × Ultrasonic sensor
+* 1 × Soil moisture sensor module
 * 1 × LDR module
+* 1 × USB LED lamp 
 * 1 × Buzzer
 * 1 x Spray bottle
 * 1 × Servo motor
