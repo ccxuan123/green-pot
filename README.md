@@ -39,9 +39,9 @@ The project code `.ino` file is in [here](arduino_ide/green-pot/green-pot.ino).
 This branch contains project files from [Platform I/O](https://platformio.org/). It is an extension for IDE. CX use it in Visual Studio Code. The Platform I/O project files is located in [PIO](PIO) folder. The main code is inside `src` folder.  
 
 ## Yay! Full code is in Beta 🎉
-The project folder is in [green-pot-full-assemble](PIO/green-pot-full-assemble).
-The main code is in [here](PIO/green-pot-full-assemble/src/main.cpp)
+The Arduino IDE project folder is in [green-pot](arduino_ide/green-pot/). The main code is in [here](arduino_ide/green-pot/green-pot.ino)  
 
+The Platform I/O project folder is in [green-pot-full-assemble](PIO/green-pot-full-assemble). The main code is in [here](PIO/green-pot-full-assemble/src/main.cpp)  
 
 ## Component function test
 
@@ -51,5 +51,7 @@ The main code is in [here](PIO/green-pot-full-assemble/src/main.cpp)
 - [x] Servo motor (water spray)
 - [x] Soil Humidity sensor [Test code](PIO/test-soil-moisture/src/main.cpp)
 
-## Covert `main.cpp` to `.ino`
-Just remove the `<Arduino.h>` header in `main.cpp`
+## Convert Platform I/O project for Arduino IDE
+The main code is inside th `src` folder. To use it in Arduino IDE just remove the `<Arduino.h>` header in `main.cpp`
+
+
