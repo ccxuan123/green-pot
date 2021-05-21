@@ -53,5 +53,3 @@ The main code is in [here](PIO/green-pot-full-assemble/src/main.cpp)
 
 ## Covert `main.cpp` to `.ino`
 Just remove the `<Arduino.h>` header in `main.cpp`
-
-

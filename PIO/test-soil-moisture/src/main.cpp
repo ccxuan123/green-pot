@@ -3,7 +3,8 @@
 #include <Servo.h>
 
 #define moistDigital 12
-#define moistAnalog A0
+#define servoPin 9
+//#define moistAnalog A0
 Servo sprayer;  // create servo object to control a servo
 
 /* Task Createion */
@@ -36,7 +37,7 @@ void loop() {
 /* Check moisture task with priority of 1 */
 static void TaskCheckMoist(void *pvParameters)
 {
-  sprayer.attach(9);
+  sprayer.attach(servoPin);
   pinMode(moistDigital, INPUT);
   while(1){
     if(digitalRead(moistDigital)){
