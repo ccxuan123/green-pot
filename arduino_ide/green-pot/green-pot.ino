@@ -22,11 +22,10 @@ bool objFlag2 = false; //flag for ultrasonic sensor detected object at N s
 bool outputOff = false; 
 
 /* Parameters for the system */
-// NOT IMPLEMENTED YET
 int MAXDISTLIMIT = 50;
 int MINDISTLIMIT = 2;
 int SPRAYTIME = 2000; //in milliseconds
-
+int DELAYTIME = 3000;
 
 /* Function for using ultrasonic sensor */
 long readUltrasonicDistance(int triggerPin, int echoPin);
@@ -66,7 +65,7 @@ static void TaskReadDist1(void *pvParameters)
 
     // update the Potentiometer resistacne value
     // to calibrate the min distance to trigger output
-    distanceLimit = map(analogRead(ultraPot), 0, 1023, 5, 50);
+    distanceLimit = map(analogRead(ultraPot), 0, 1023, MINDISTLIMIT, MAXDISTLIMIT);
 
     //print current detected distance every second
     if(false){ //not working yet
@@ -90,7 +89,7 @@ static void TaskReadDist2(void *pvParameters)
       Serial.println("Object detected. Waiting for output...");
 
       // wait for sometime to check again
-      vTaskDelay(3000/portTICK_PERIOD_MS);
+      vTaskDelay(DELAYTIME / portTICK_PERIOD_MS);
       distance = readUltrasonicDistance(trigPin, echoPin);
 
       // update objFlag2
@@ -113,6 +112,8 @@ static void TaskOutput(void *pvParameters)
       // switch on LED and buzzer
       digitalWrite(ledPin, HIGH);
       digitalWrite(buzzerPin, HIGH);
+      sprayer.write(180); //spray water
+      
 
       // set flag to switch off outputs to true
       outputOff = true;
@@ -123,6 +124,7 @@ static void TaskOutput(void *pvParameters)
       // switch off LED and buzzer
       digitalWrite(ledPin, LOW);
       digitalWrite(buzzerPin, LOW);
+      sprayer.write(0);
 
       // set flag to switch off outputs to false
       outputOff = false;
@@ -162,7 +164,7 @@ static void TaskCheckMoist (void *pvParameters)
 
       //activate sprayer for 2 seconds
       sprayer.write(180);
-      vTaskDelay(2000/portTICK_PERIOD_MS);
+      vTaskDelay( SPRAYTIME /portTICK_PERIOD_MS);
       sprayer.write(0);
     }
     vTaskDelay(5000/portTICK_PERIOD_MS);
