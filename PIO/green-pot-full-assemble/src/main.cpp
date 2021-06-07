@@ -100,7 +100,7 @@ static void TaskReadDist2(void *pvParameters)
   }
 }
 
-/* Output Task with priority of 2 */
+/* Output Task with priority of 3 */
 static void TaskOutput(void *pvParameters)
 {
   pinMode(ledPin, OUTPUT);
