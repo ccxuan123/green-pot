@@ -2,10 +2,10 @@
 #include <Arduino_FreeRTOS.h>
 //#pragma GCC ("03")
 
-#define LED 11
+#define LED 3
 #define ultraPot A1
-const int echoPin = 8; 
-const int trigPin = 9; 
+const int echoPin = 12; 
+const int trigPin = 13; 
 
 long distance;
 int distanceLimit;

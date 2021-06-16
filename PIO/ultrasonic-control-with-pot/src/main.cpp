@@ -5,9 +5,9 @@ TaskHandle_t TaskHandle_ReadDistance;
 TaskHandle_t TaskHandle_LedOutput;
 
 #define ultraPot A1
-const int echoPin = 8; // attach pin 8 Arduino to pin Echo of HC-SR04
-const int trigPin = 9; //attach pin 9 Arduino to pin Trig of HC-SR04
-const int LED = 11;
+const int echoPin = 12; // attach pin 8 Arduino to pin Echo of HC-SR04
+const int trigPin = 13; //attach pin 9 Arduino to pin Trig of HC-SR04
+const int LED = 3;
 long distance;
 int distanceLimit;
 
