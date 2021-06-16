@@ -59,23 +59,12 @@ static void TaskReadDist1(void *pvParameters)
 {
   pinMode(ultraPot, INPUT);
   while(1){
-    //Serial.println("Running TaskReadDist1");
-
     // update distace between detected object and sensor
     distance = readUltrasonicDistance(trigPin, echoPin);
 
-    // update the Potentiometer resistacne value
-    // to calibrate the min distance to trigger output
+    // update pot value that define current limit
     distanceLimit = map(analogRead(ultraPot), 0, 1023, MINDISTLIMIT, MAXDISTLIMIT);
 
-    //print current detected distance every second
-    if(false){ //not working yet
-      Serial.print(millis()%15);
-      Serial.print("Distance: ");
-      Serial.print(distance);
-      Serial.print("\tLimit: ");
-      Serial.println(distanceLimit);
-    }
     // update objFlag1
     objFlag1 = (distance <= distanceLimit) ? true : false;
     vTaskDelay(15);
@@ -114,7 +103,6 @@ static void TaskOutput(void *pvParameters)
       digitalWrite(ledPin, HIGH);
       digitalWrite(buzzerPin, HIGH);
       sprayer.write(180); //spray water
-      
 
       // set flag to switch off outputs to true
       outputOff = true;
@@ -142,7 +130,7 @@ static void TaskCheckLight (void *pvParameters)
   while(1){
     // check if the surroundings is too dark
     if(digitalRead(ldrDigitalPin)){
-      Serial.println("Too dark, extra light source activate");
+      Serial.println("Dark, extra light on");
       //Switch on the extra light
       digitalWrite(lightPin, HIGH);
     } else {
@@ -161,17 +149,18 @@ static void TaskCheckMoist (void *pvParameters)
   while(1){
     //Check if the pot is too dry
     if(digitalRead(moistDigitalPin)){
-      Serial.println("Too dry, spray water");
+      Serial.println("Too dry, spray water for 2s");
 
       //activate sprayer for 2 seconds
       sprayer.write(180);
       vTaskDelay( SPRAYTIME /portTICK_PERIOD_MS);
       sprayer.write(0);
+    } else {
+      Serial.println("soil is damp");
     }
     vTaskDelay(5000/portTICK_PERIOD_MS);
   }
 }
-
 
 /* Functions for using ultrasonic sensor */
 long readUltrasonicDistance(int triggerPin, int echoPin){
