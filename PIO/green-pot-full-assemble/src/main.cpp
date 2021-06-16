@@ -40,18 +40,18 @@ static void TaskCheckMoist(void *pvParameters);
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("In Step Function");
+  Serial.print("In Step Function\n");
 
   /* Create tasks */
-  xTaskCreate(TaskReadDist1, "ReadDistance1", 128, NULL, 3, NULL);
-  xTaskCreate(TaskReadDist2, "ReadDistance2", 128, NULL, 3, NULL);
-  xTaskCreate(TaskOutput, "Output", 128, NULL, 3, NULL);
-  xTaskCreate(TaskCheckLight, "Check Light", 128, NULL, 1, NULL);
-  xTaskCreate(TaskCheckMoist, "Check Moist", 128, NULL, 1, NULL);
+  xTaskCreate(TaskReadDist1, "ReadDistance1", 100, NULL, 3, NULL);
+  xTaskCreate(TaskReadDist2, "ReadDistance2", 100, NULL, 3, NULL);
+  xTaskCreate(TaskOutput, "Output", 100, NULL, 3, NULL);
+  xTaskCreate(TaskCheckLight, "Check Light", 100, NULL, 1, NULL);
+  xTaskCreate(TaskCheckMoist, "Check Moist", 100, NULL, 1, NULL);
 }
 
 void loop() {
-  //Serial.println(F("Loop function"));
+  //empty
 }
 
 /* ReadDist1 Task with priority of 3 */
@@ -64,8 +64,7 @@ static void TaskReadDist1(void *pvParameters)
 
     // update pot value that define current limit
     distanceLimit = map(analogRead(ultraPot), 0, 1023, MINDISTLIMIT, MAXDISTLIMIT);
-
-    // update objFlag1
+    
     objFlag1 = (distance <= distanceLimit) ? true : false;
     vTaskDelay(15);
   }
@@ -76,7 +75,7 @@ static void TaskReadDist2(void *pvParameters)
 {
   while(1){
     if(objFlag1){
-      Serial.println("Object detected. Waiting for output...");
+      Serial.print("Object detected. Waiting for output...\n");
 
       // wait for sometime to check again
       vTaskDelay(DELAYTIME / portTICK_PERIOD_MS);
@@ -97,7 +96,7 @@ static void TaskOutput(void *pvParameters)
   while(1){
     //Check if object is remain detected for 3s
     if(objFlag1 && objFlag2){
-      Serial.println("Output activate");
+      Serial.print("Output activate\n");
 
       // switch on LED and buzzer
       digitalWrite(ledPin, HIGH);
@@ -108,7 +107,7 @@ static void TaskOutput(void *pvParameters)
       outputOff = true;
     } else if (!objFlag1 && outputOff){
       vTaskDelay(1000/portTICK_PERIOD_MS);
-      Serial.println("Output deactivate");
+      Serial.print("Output deactivate\n");
 
       // switch off LED and buzzer
       digitalWrite(ledPin, LOW);
@@ -130,11 +129,12 @@ static void TaskCheckLight (void *pvParameters)
   while(1){
     // check if the surroundings is too dark
     if(digitalRead(ldrDigitalPin)){
-      Serial.println("Dark, extra light on");
+      Serial.print("Dark light on\n");
       //Switch on the extra light
       digitalWrite(lightPin, HIGH);
     } else {
       //Switch off the extra light
+      Serial.print("Bright light off\n");
       digitalWrite(lightPin, LOW);
     }
     vTaskDelay (2000/portTICK_PERIOD_MS);
@@ -149,14 +149,14 @@ static void TaskCheckMoist (void *pvParameters)
   while(1){
     //Check if the pot is too dry
     if(digitalRead(moistDigitalPin)){
-      Serial.println("Too dry, spray water for 2s");
+      Serial.print("Too dry, spray water for 2s\n");
 
       //activate sprayer for 2 seconds
       sprayer.write(180);
       vTaskDelay( SPRAYTIME /portTICK_PERIOD_MS);
       sprayer.write(0);
     } else {
-      Serial.println("soil is damp");
+      Serial.print("soil is damp\n");
     }
     vTaskDelay(5000/portTICK_PERIOD_MS);
   }
