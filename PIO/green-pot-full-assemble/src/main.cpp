@@ -43,11 +43,11 @@ void setup() {
   Serial.print("In Step Function\n");
 
   /* Create tasks */
-  xTaskCreate(TaskReadDist1, "ReadDistance1", 100, NULL, 3, NULL);
-  xTaskCreate(TaskReadDist2, "ReadDistance2", 100, NULL, 3, NULL);
-  xTaskCreate(TaskOutput, "Output", 100, NULL, 3, NULL);
-  xTaskCreate(TaskCheckLight, "Check Light", 100, NULL, 1, NULL);
-  xTaskCreate(TaskCheckMoist, "Check Moist", 100, NULL, 1, NULL);
+  xTaskCreate(TaskReadDist1, "ReadDistance1", 80, NULL, 3, NULL);
+  xTaskCreate(TaskReadDist2, "ReadDistance2", 80, NULL, 3, NULL);
+  xTaskCreate(TaskOutput, "Output", 80, NULL, 3, NULL);
+  xTaskCreate(TaskCheckLight, "Check Light", 80, NULL, 1, NULL);
+  xTaskCreate(TaskCheckMoist, "Check Moist", 80, NULL, 1, NULL);
 }
 
 void loop() {
@@ -65,6 +65,14 @@ static void TaskReadDist1(void *pvParameters)
     // update pot value that define current limit
     distanceLimit = map(analogRead(ultraPot), 0, 1023, MINDISTLIMIT, MAXDISTLIMIT);
     
+    // print out the current limit about every 1s */
+    if(millis()%1000>=900){
+      Serial.print("Distance: ");
+      Serial.print(distance);
+      Serial.print("\tLimit: ");
+      Serial.println(distanceLimit);
+    }
+
     objFlag1 = (distance <= distanceLimit) ? true : false;
     vTaskDelay(15);
   }
